@@ -57,32 +57,23 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 			 <plugin>
-                <groupId>com.spotify</groupId>
-                <artifactId>docker-maven-plugin</artifactId>
-                <version>0.4.11</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>build</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <imageName>yuchena/${project.artifactId}</imageName>
-                    <baseImage>java</baseImage>
-                    <dockerDirectory>${project.basedir}/src/main/docker</dockerDirectory>
-                    <dockerHost>https://192.168.99.100:2376</dockerHost>
-                    <dockerCertPath>C:\Users\刘星亮\.docker\machine\machines\default</dockerCertPath>
-                    <resources>
-                        <resource>
-                            <targetPath>/</targetPath>
-                            <directory>${project.build.directory}</directory>
-                            <include>${project.build.finalName}.jar</include>
-                        </resource>
-                    </resources>
-                </configuration>
-            </plugin>
+      <groupId>com.spotify</groupId>
+      <artifactId>docker-maven-plugin</artifactId>
+      <version>0.4.11</version>
+      <configuration>
+        <imageName>yuchena/myspringboot/${project.artifactId}-${project.version}</imageName>
+        <dockerDirectory>${project.basedir}/src/main/docker</dockerDirectory>
+         <dockerHost>https://192.168.99.100:2376</dockerHost>
+         <dockerCertPath>C:\Users\刘星亮\.docker\machine\machines\default</dockerCertPath>
+        <resources>
+           <resource>
+             <targetPath>/</targetPath>
+             <directory>${project.build.directory}</directory>
+             <include>${project.build.finalName}.jar</include>
+           </resource>
+        </resources>
+      </configuration>
+    </plugin>
 		</plugins>
 	</build>
 
