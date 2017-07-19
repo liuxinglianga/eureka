@@ -1,5 +1,10 @@
 package controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -11,16 +16,19 @@ import org.activiti.engine.FormService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
+import springfox.documentation.annotations.ApiIgnore;
 @SpringBootApplication
-@Controller
+@RestController
 @RequestMapping("/act")
+@Api(value = "/helloWorld", description = "Greeting API", position = 1)  
+
 public class ActCotroller {
 	// private String fp_leaveType;
 	//
@@ -37,7 +45,7 @@ public class ActCotroller {
 	
 	@Autowired
 	private TaskService taskService;
-
+	@ApiIgnore
 	@RequestMapping("/start")
 	public String start1(Map<String, Object> model) {
 		Object form = formService.getRenderedStartForm("myProcess:3:13958");
@@ -46,7 +54,7 @@ public class ActCotroller {
 		return "start";
 	}
 
-	@RequestMapping("/apply/{name}")
+	@ApiIgnore
 	public String apply(Map<String, Object> model, @PathVariable String name,
 			@RequestParam String fp_leaveType,
 			@RequestParam String fp_startTime, 
@@ -69,7 +77,11 @@ public class ActCotroller {
 		return "success";
 	}
 
-	@RequestMapping("/my/{name}")
+	@ApiOperation(value="查询代办", notes="查询当前用户的代办")
+	@ApiImplicitParams({@ApiImplicitParam(name = "model", value = "模型", required = true, dataType = "Map<String, Object>"),
+    @ApiImplicitParam(name = "name", value = "用户名", required = true, dataType = "String")})
+	
+	@RequestMapping(value="/my/{name}" ,method=RequestMethod.GET)
 	public String apply(Map<String, Object> model, @PathVariable String name
 			) 
 	{
@@ -77,9 +89,11 @@ public class ActCotroller {
 				.list();
 		
 		 model.put("tasks", tasks);
-		return "my";
+		 
+		return "my list";
 	}
 	
+	@ApiIgnore
 	@RequestMapping("/taskinfo/{taskId}")
 	public String showTask(Map<String, Object> model, @PathVariable String taskId
 			) 
@@ -89,7 +103,7 @@ public class ActCotroller {
 
 		return "taskInfo";
 	}
-	
+	@ApiIgnore
 	@RequestMapping("/taskDeal/{taskId}")
 	public String dealTask(Map<String, Object> model, @PathVariable String taskId, 
 			HttpServletRequest request
@@ -115,9 +129,6 @@ public class ActCotroller {
 		return "success";
 	}
 	
-	public static void main(String[] args) {
-		SpringApplication.run(ActCotroller.class, args);
-
-	}
+	
 
 }
